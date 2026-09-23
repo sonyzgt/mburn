@@ -14,8 +14,6 @@ import {
   Workflow,
   CheckCircle2,
   Activity,
-  Play,
-  Pause,
   Plus,
   GitBranch,
   Database,
@@ -305,7 +303,6 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
     config.tokenAddress.toLowerCase() !== "none"
   );
 
-  const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState<number>(-1);
   const [cycleType, setCycleType] = useState<"burn" | "keep">(
     state?.nextCycleType || "burn"
@@ -325,7 +322,7 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
   }, [state?.nextCycleType, state?.currentPhase]);
 
   // Handle workflow step progression:
-  // ONLY animate when the bot is actually executing on-chain OR during explicit user preview simulation!
+  // ONLY animate when the bot is actually executing on-chain
   useEffect(() => {
     // 1. REAL ON-CHAIN EXECUTION (Bot is actively executing on Robinhood Chain)
     if (state?.isWheelSpinning && state?.currentPhase) {
@@ -342,23 +339,9 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
       return;
     }
 
-    // 2. PREVIEW SIMULATION (Explicitly toggled by user for demonstration)
-    if (isSimulating) {
-      const interval = setInterval(() => {
-        setActiveStep((prev) => {
-          const next = prev < 0 ? 0 : (prev + 1) % 4;
-          if (next === 0) {
-            setCycleType((curr) => (curr === "burn" ? "keep" : "burn"));
-          }
-          return next;
-        });
-      }, 2000);
-      return () => clearInterval(interval);
-    }
-
-    // 3. STANDBY / IDLE (Default: token not configured yet OR bot waiting for escrow threshold)
+    // 2. STANDBY / IDLE (Default: token not configured yet OR bot waiting for escrow threshold)
     setActiveStep(-1);
-  }, [state?.isWheelSpinning, state?.currentPhase, isSimulating]);
+  }, [state?.isWheelSpinning, state?.currentPhase]);
 
   const handleNodeClick = (nodeKey: string) => {
     sounds.playTone(500, "sine", 0.06, 0.08);
@@ -463,29 +446,8 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
           </div>
         </div>
 
-        {/* Clean Status Badges & Controls */}
+        {/* Clean Status Badges */}
         <div className="flex items-center gap-2">
-          {!isConfigured ? (
-            <button
-              onClick={() => setIsSimulating((prev) => !prev)}
-              className="px-3 py-1.5 rounded-xl bg-yellow-300 hover:bg-yellow-400 active:translate-y-0.5 border-2 border-black text-xs font-mono font-black text-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 transition-all cursor-pointer"
-            >
-              {isSimulating ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-              <span>{isSimulating ? "STOP PREVIEW" : "TEST DEMO FLOW"}</span>
-            </button>
-          ) : (
-            onTriggerExecution && (
-              <button
-                onClick={onTriggerExecution}
-                disabled={state?.isWheelSpinning}
-                className="px-3 py-1.5 rounded-xl bg-yellow-300 hover:bg-yellow-400 active:translate-y-0.5 disabled:opacity-50 border-2 border-black text-xs font-mono font-black text-black shadow-[2px_2px_0px_#000] flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>{state?.isWheelSpinning ? "EXECUTING..." : "TEST CYCLE"}</span>
-              </button>
-            )
-          )}
-
           <div className="px-3 py-1.5 rounded-xl bg-yellow-100 border-2 border-black text-xs font-mono font-black text-black shadow-[2px_2px_0px_#000] hidden sm:flex items-center gap-1.5">
             <Code2 className="w-3.5 h-3.5 text-orange-600" />
             <span>CODE INSPECTOR</span>
@@ -515,15 +477,15 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
               WORKFLOW AGENT:
             </span>
             <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-black ${
-              !isConfigured && !isSimulating
+              !isConfigured
                 ? "bg-zinc-200 text-zinc-700"
-                : state?.isWheelSpinning || isSimulating
+                : state?.isWheelSpinning
                   ? "bg-emerald-200 text-emerald-950 font-black animate-pulse"
                   : "bg-white text-zinc-800"
             }`}>
-              {!isConfigured && !isSimulating
+              {!isConfigured
                 ? "STANDBY (ADDRESS NOT SET)"
-                : state?.isWheelSpinning || isSimulating
+                : state?.isWheelSpinning
                   ? "EXECUTING CYCLE"
                   : "STANDBY (MONITORING)"}
             </span>
