@@ -141,7 +141,7 @@ export function App() {
 
   const totalTokensBurned = state.totalTokensBurned > 0
     ? state.totalTokensBurned
-    : burnLedger.reduce((acc, cur) => acc + (cur.burnedIncinerator || 0), 0);
+    : burnLedger.reduce((acc, cur) => acc + (cur.burnedMuseburn || cur.burnedIncinerator || 0), 0);
 
   const burnedPercent = state.burnedPercentageOfSupply > 0
     ? state.burnedPercentageOfSupply
@@ -157,7 +157,7 @@ export function App() {
       {/* 1. Memecoin Infinite Marquee Ticker */}
       <div className="bg-yellow-300 border-b-2 border-black py-1.5 overflow-hidden whitespace-nowrap z-50 select-none shadow-xs">
         <div className="animate-marquee flex items-center gap-6 font-black font-mono text-xs sm:text-sm tracking-wider uppercase text-black">
-          <span className="flex items-center gap-2">🔥 {tokenSymbol} AUTO-INCINERATOR</span>
+          <span className="flex items-center gap-2">🔥 {tokenSymbol} AUTO-MUSEBURN</span>
           <span>•</span>
           <span className="flex items-center gap-2">🚀 ROBINHOOD CHAIN (ID: 4663)</span>
           <span>•</span>

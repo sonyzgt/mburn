@@ -73,13 +73,14 @@ export const BurnLedgerDrawer: React.FC<BurnLedgerDrawerProps> = ({
             txHash: entry.claimTx || "",
           });
         } else {
-          if (entry.burnedIncinerator > 0 || entry.burnTx) {
+          const burnedTokens = entry.burnedMuseburn || entry.burnedIncinerator || 0;
+          if (burnedTokens > 0 || entry.burnTx) {
             items.push({
               id: `burn-${entry.id}`,
               time: timeOnly,
               type: "burn",
               tag: "BURN",
-              message: `Permanently burned ${new Intl.NumberFormat("en-US").format(Math.round(entry.burnedIncinerator || 250000))} INCINERATOR to 0x000...dEaD`,
+              message: `Permanently burned ${new Intl.NumberFormat("en-US").format(Math.round(burnedTokens || 250000))} MUSEBURN to 0x000...dEaD`,
               txHash: entry.burnTx || entry.claimTx || "",
             });
           }
@@ -89,7 +90,7 @@ export const BurnLedgerDrawer: React.FC<BurnLedgerDrawerProps> = ({
               time: timeOnly,
               type: "buyback",
               tag: "BUYBACK",
-              message: `Swapped ${(entry.boughtETH || entry.claimedETH || 0.01).toFixed(4)} ETH on DEX Router -> bought ${new Intl.NumberFormat("en-US").format(Math.round(entry.burnedIncinerator || 250000))} tokens`,
+              message: `Swapped ${(entry.boughtETH || entry.claimedETH || 0.01).toFixed(4)} ETH on DEX Router -> bought ${new Intl.NumberFormat("en-US").format(Math.round(burnedTokens || 250000))} tokens`,
               txHash: entry.buyTx || "",
             });
           }

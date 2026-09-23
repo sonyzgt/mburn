@@ -15,7 +15,7 @@ export const LiveLogs: React.FC<LiveLogsProps> = ({ logs, onClearLogs }) => {
         <div className="flex items-center gap-2.5">
           <Terminal className="w-4 h-4 text-white" />
           <span className="font-mono font-bold text-xs tracking-wider text-white">
-            INCINERATOR LOG STREAM
+            MUSEBURN LOG STREAM
           </span>
           <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#16171e] text-zinc-300 border-liquid-metal">
             ROBINHOOD [4663]

@@ -1,4 +1,4 @@
-# INCINERATOR — Autonomous Buyback & Burn Engine (Pons Family v2)
+# MUSEBURN — Autonomous Buyback & Burn Engine (Pons Family v2)
 
 An autonomous token liquidity, buyback, and burn engine deployed on **Robinhood Chain (Chain ID: 4663)** integrated with **Pons Family v2**.
 
@@ -6,7 +6,7 @@ An autonomous token liquidity, buyback, and burn engine deployed on **Robinhood 
 
 ## Overview
 
-INCINERATOR operates on a perpetual closed-loop mechanism:
+MUSEBURN operates on a perpetual closed-loop mechanism:
 1. **Trade & Tax Inflow**: Trading activity generates creator fees in native ETH accumulating in the Fee Escrow (`0xd3AFEB...Ac9e`).
 2. **Auto-Claim Fee**: When claimable fees reach the configured threshold (e.g. `0.015 ETH`), the engine executes `escrow.claim()`.
 3. **Auto-Buyback DEX**: Claimed ETH is immediately swapped for tokens on the DEX (Uniswap v4 / Curve).
@@ -42,8 +42,8 @@ cp .env.example .env
 
 Edit `.env`:
 ```env
-VITE_TOKEN_NAME="INCINERATOR"
-VITE_TOKEN_SYMBOL="INCINERATOR"
+VITE_TOKEN_NAME="MUSEBURN"
+VITE_TOKEN_SYMBOL="MUSEBURN"
 VITE_TOKEN_ADDRESS="0xa6a44f24780b95d467d482de278a017fd6d7c2b3"
 VITE_CURVE_ADDRESS="0x..."
 VITE_CREATOR_ADDRESS="0x..."

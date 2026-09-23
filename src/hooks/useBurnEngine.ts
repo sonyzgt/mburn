@@ -94,7 +94,7 @@ const getInitialState = (cfg: MachineConfig): FlywheelState => {
 
 const getInitialLogs = (cfg: MachineConfig): ActivityLog[] => {
   try {
-    const stored = localStorage.getItem('incinerator_activity_logs');
+    const stored = localStorage.getItem('museburn_activity_logs') || localStorage.getItem('incinerator_activity_logs');
     if (stored) {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -107,7 +107,7 @@ const getInitialLogs = (cfg: MachineConfig): ActivityLog[] => {
 
 const getInitialLedger = (): BurnLedgerEntry[] => {
   try {
-    const stored = localStorage.getItem('incinerator_burn_ledger');
+    const stored = localStorage.getItem('museburn_burn_ledger') || localStorage.getItem('incinerator_burn_ledger');
     if (stored) {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -128,7 +128,7 @@ export function useFlywheelEngine() {
     setConfigState((prev) => {
       const resolved = typeof newConfig === 'function' ? newConfig(prev) : newConfig;
       try {
-        localStorage.setItem('incinerator_engine_config', JSON.stringify(resolved));
+        localStorage.setItem('museburn_engine_config', JSON.stringify(resolved));
       } catch (e) {
         // ignore
       }
@@ -155,6 +155,9 @@ export function useFlywheelEngine() {
       localStorage.removeItem('incinerator_engine_config');
       localStorage.removeItem('incinerator_activity_logs');
       localStorage.removeItem('incinerator_burn_ledger');
+      localStorage.removeItem('museburn_engine_config');
+      localStorage.removeItem('museburn_activity_logs');
+      localStorage.removeItem('museburn_burn_ledger');
     } catch (e) {
       // ignore
     }
@@ -170,7 +173,7 @@ export function useFlywheelEngine() {
     setLogs((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
       try {
-        localStorage.setItem('incinerator_activity_logs', JSON.stringify(next.slice(0, 80)));
+        localStorage.setItem('museburn_activity_logs', JSON.stringify(next.slice(0, 80)));
       } catch (e) {}
       return next;
     });
@@ -181,7 +184,7 @@ export function useFlywheelEngine() {
     setBurnLedger((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
       try {
-        localStorage.setItem('incinerator_burn_ledger', JSON.stringify(next.slice(0, 100)));
+        localStorage.setItem('museburn_burn_ledger', JSON.stringify(next.slice(0, 100)));
       } catch (e) {}
       return next;
     });
@@ -280,15 +283,16 @@ export function useFlywheelEngine() {
             if (prevLogs.length === 0) {
               const seedLogs: ActivityLog[] = [];
               for (const entry of ledgerRes.entries.slice(0, 30)) {
+                const burnedTokens = entry.burnedMuseburn || entry.burnedIncinerator || 0;
                 seedLogs.push({
                   id: `burn-${entry.id}`,
                   timestamp: entry.timeStr.split(' (')[0],
                   phase: 'burn',
                   action: 'BURN TO DEAD',
-                  details: `Permanently incinerated ${new Intl.NumberFormat('en-US').format(Math.round(entry.burnedIncinerator))} tokens to 0x000...dEaD`,
+                  details: `Permanently burned ${new Intl.NumberFormat('en-US').format(Math.round(burnedTokens))} tokens to 0x000...dEaD`,
                   txHash: entry.burnTx || entry.claimTx || '',
                   amountETH: entry.claimedETH,
-                  amountToken: Math.round(entry.burnedIncinerator),
+                  amountToken: Math.round(burnedTokens),
                   status: 'success',
                   contractTarget: '0x000...dEaD'
                 });
@@ -298,10 +302,10 @@ export function useFlywheelEngine() {
                     timestamp: entry.timeStr.split(' (')[0],
                     phase: 'buyback',
                     action: 'AUTO-BUYBACK',
-                    details: `Swapped ${entry.claimedETH.toFixed(4)} ETH on DEX -> bought ${new Intl.NumberFormat('en-US').format(Math.round(entry.burnedIncinerator))} tokens`,
+                    details: `Swapped ${entry.claimedETH.toFixed(4)} ETH on DEX -> bought ${new Intl.NumberFormat('en-US').format(Math.round(burnedTokens))} tokens`,
                     txHash: entry.buyTx,
                     amountETH: entry.claimedETH,
-                    amountToken: Math.round(entry.burnedIncinerator),
+                    amountToken: Math.round(burnedTokens),
                     status: 'success',
                     contractTarget: 'DEX.buy()'
                   });

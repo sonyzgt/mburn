@@ -140,7 +140,7 @@ export async function executeMarketBuyback(
   burn: {
     id: "burn",
     title: "0xdead Graveyard Burn Tool",
-    subtitle: "Node #4 // Irreversible Incinerator Tool",
+    subtitle: "Node #4 // Irreversible MuseBurn Tool",
     filename: "burnGraveyardSink.ts",
     language: "typescript",
     emoji: "💀",
@@ -394,7 +394,7 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
   const STAGE_MESSAGES_BURN = [
     "STAGE 1/4 [TRIGGER]: DEX trade detected on Robinhood Chain! Dispatching event signal to MuseBurn Agent...",
     "STAGE 2/4 [AGENT LOGIC]: MuseBurn Agent polling Robinhood RPC, reading escrow memory & calculating buyback route...",
-    "STAGE 3/4 [BRANCH EVAL]: Odd Cycle (BURN) threshold met! Routing flow along top branch towards 0xdead Incinerator...",
+    "STAGE 3/4 [BRANCH EVAL]: Odd Cycle (BURN) threshold met! Routing flow along top branch towards 0xdead MuseBurn...",
     "STAGE 4/4 [0xdead BURN]: Autonomous Buyback executed! Sweeping orderbook and transferring tokens to 0xdead Graveyard...",
   ];
 
