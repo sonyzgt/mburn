@@ -261,7 +261,7 @@ export const CommunityEcosystemBanner: React.FC<CommunityEcosystemBannerProps> =
             </h3>
           </div>
           <p className="text-xs font-mono text-zinc-400 max-w-xl">
-            No administrator can pause the flywheel or withdraw funds. Follow live burn notifications
+            No administrator can pause the workflow or withdraw funds. Follow live burn notifications
             and community updates directly on official channels.
           </p>
         </div>

@@ -138,7 +138,7 @@ export const BurnLedgerDrawer: React.FC<BurnLedgerDrawerProps> = ({
         time: now,
         type: "system",
         tag: "SYSTEM",
-        message: "Flywheel Burn Engine active on Robinhood Chain (ID: 4663)",
+        message: "Burn Workflow Engine active on Robinhood Chain (ID: 4663)",
       });
       items.push({
         id: "sys-monitor",

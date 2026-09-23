@@ -206,7 +206,7 @@ export function App() {
                 </span>
               </div>
               <span className="text-[10px] font-bold text-zinc-500 -mt-1 tracking-wide">
-                THE COZY BURN FLYWHEEL
+                THE COZY BURN WORKFLOW
               </span>
             </div>
           </a>
@@ -500,7 +500,7 @@ export function App() {
 
           </div>
 
-          {/* 5. Autonomous Perpetual Flywheel Engine */}
+          {/* 5. Autonomous Perpetual Workflow Engine */}
           <div className="mt-14 sm:mt-20">
             <BurnFlywheel
               state={state}
