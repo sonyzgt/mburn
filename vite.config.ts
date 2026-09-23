@@ -135,21 +135,21 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), adminSavePlugin()],
   server: {
     host: '0.0.0.0',
-    port: parseInt(process.env.WEB_PORT || "3099", 10),
+    port: parseInt(process.env.WEB_PORT || "3095", 10),
     proxy: {
       '/api': {
-        target: `http://localhost:${process.env.PORT || '5010'}`,
+        target: `http://localhost:${process.env.PORT || '5015'}`,
         changeOrigin: true,
       },
     },
   },
   preview: {
     host: '0.0.0.0',
-    port: parseInt(process.env.WEB_PORT || "3099", 10),
+    port: parseInt(process.env.WEB_PORT || "3095", 10),
     allowedHosts: true,
     proxy: {
       '/api': {
-        target: `http://localhost:${process.env.PORT || '5010'}`,
+        target: `http://localhost:${process.env.PORT || '5015'}`,
         changeOrigin: true,
       },
     },

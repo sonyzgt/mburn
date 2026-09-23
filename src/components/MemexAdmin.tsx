@@ -156,7 +156,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
         // fallback
       }
 
-      // 4. If bot is running on port 5010, sync directly to bot API
+      // 4. If bot is running on port 5015, sync directly to bot API
       try {
         await fetch('/api/config', {
           method: 'POST',

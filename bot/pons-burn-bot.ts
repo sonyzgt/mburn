@@ -52,7 +52,7 @@ let currentConfig = {
   curveAddress: OFFICIAL_INCINERATOR_CURVE,
   claimThresholdETH: process.env.CLAIM_THRESHOLD_ETH || process.env.VITE_CLAIM_THRESHOLD_ETH || "0.01",
   pollIntervalSeconds: parseInt(process.env.POLL_INTERVAL_SECONDS || "10", 10),
-  port: parseInt(process.env.PORT || "5010", 10),
+  port: parseInt(process.env.PORT || "5015", 10),
   cycleCount: 0
 };
 
@@ -541,7 +541,7 @@ const server = http.createServer(async (req, res) => {
   return sendJSON(res, 404, { success: false, error: "Not Found" });
 });
 
-const PORT = currentConfig.port || 5010;
+const PORT = currentConfig.port || 5015;
 
 server.on("error", (err: any) => {
   if (err.code === "EADDRINUSE") {
