@@ -240,7 +240,7 @@ export function LiquidMetalButton({
               icon ? (
                 <span
                   style={{
-                    color: isHovered ? "#ffffff" : variant === "ember" ? "#ff7a45" : "#a1a1aa",
+                    color: isHovered ? "#ffffff" : variant === "ember" ? "#ff7a45" : "#e4e4e7",
                     filter: "drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.5))",
                     transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
                     transform: "scale(1)",
@@ -283,13 +283,11 @@ export function LiquidMetalButton({
                 <span
                   style={{
                     fontSize: isXs ? "11px" : isSm ? "12px" : "14px",
-                    color: isActive ? "#ffffff" : isHovered ? "#ffffff" : variant === "ember" ? "#ffffff" : "#a1a1aa",
-                    fontWeight: isActive || variant === "ember" ? 600 : 500,
+                    color: "#ffffff",
+                    fontWeight: 600,
                     fontFamily: isXs ? "JetBrains Mono, monospace" : "inherit",
-                    textShadow: isActive || variant === "ember"
-                      ? "0px 1px 4px rgba(255, 255, 255, 0.4)"
-                      : "0px 1px 2px rgba(0, 0, 0, 0.5)",
-                    transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                    textShadow: "0px 1px 2px rgba(0, 0, 0, 0.4)",
+                    transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
                     transform: "scale(1)",
                     whiteSpace: "nowrap",
                   }}

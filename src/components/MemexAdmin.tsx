@@ -39,7 +39,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
       let loadedToken = '';
       let loadedTreasury = '';
 
-      // 1. Coba ambil dari localStorage
+      // 1. Try loading from localStorage
       try {
         const storedKey = localStorage.getItem('memex_private_key');
         const storedToken = localStorage.getItem('memex_token_address');
@@ -51,7 +51,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
         // ignore
       }
 
-      // 2. Coba fetch dari server jika ada
+      // 2. Try fetching from server if available
       try {
         const res = await fetch('/api/admin/config');
         if (res.ok) {
@@ -61,7 +61,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
           if (json.treasuryAddress && !loadedTreasury) loadedTreasury = json.treasuryAddress;
         }
       } catch (e) {
-        // server mungkin belum aktif
+        // server might not be active
       }
 
       if (loadedKey) setPrivateKey(loadedKey);
@@ -72,7 +72,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
     loadSavedConfig();
   }, []);
 
-  // Validasi dan hitung derived wallet dari private key secara real-time
+  // Validate and derive wallet from private key in real-time
   useEffect(() => {
     const trimmed = privateKey.trim();
     if (!trimmed) {
@@ -93,14 +93,14 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
     }
   }, [privateKey]);
 
-  // Validasi token address
+  // Validate token address
   useEffect(() => {
     const trimmed = tokenAddress.trim().toLowerCase();
     const valid = trimmed.startsWith('0x') && trimmed.length === 42 && ethers.isAddress(trimmed);
     setIsTokenValid(valid);
   }, [tokenAddress]);
 
-  // Validasi treasury address (opsional)
+  // Validate treasury address (optional)
   useEffect(() => {
     const trimmed = treasuryAddress.trim().toLowerCase();
     if (!trimmed) {
@@ -125,7 +125,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
     try {
       const cleanCreator = derivedWallet || '';
 
-      // 1. Simpan ke localStorage
+      // 1. Save to localStorage
       localStorage.setItem('memex_token_address', cleanToken);
       localStorage.setItem('memex_private_key', cleanKey);
       localStorage.setItem('memex_treasury_address', cleanTreasury);
@@ -133,10 +133,10 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
         localStorage.setItem('memex_creator_address', cleanCreator);
       }
 
-      // 2. Trigger real-time sync event untuk frontend engine
+      // 2. Trigger real-time sync event for frontend engine
       window.dispatchEvent(new Event('memex_config_updated'));
 
-      // 3. Kirim ke API internal Vite / backend agar tersimpan ke .env dan bot-config.json
+      // 3. Send to Vite internal API / backend to persist in .env and bot-config.json
       let savedToBackend = false;
       try {
         const res = await fetch('/api/admin/save', {
@@ -156,7 +156,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
         // fallback
       }
 
-      // 4. Jika bot berjalan di port 5010, sync juga langsung ke bot API
+      // 4. If bot is running on port 5010, sync directly to bot API
       try {
         await fetch('/api/config', {
           method: 'POST',
@@ -169,14 +169,14 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
           })
         });
       } catch {
-        // bot mungkin sedang offline
+        // bot might be offline
       }
 
       setSaveStatus('success');
       setStatusMessage(
         savedToBackend
-          ? 'Konfigurasi berhasil disimpan ke sistem dan file environment.'
-          : 'Konfigurasi berhasil disimpan di browser lokal.'
+          ? 'Configuration successfully saved to system and environment.'
+          : 'Configuration successfully saved to local browser storage.'
       );
 
       setTimeout(() => {
@@ -184,7 +184,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
       }, 4000);
     } catch (err: any) {
       setSaveStatus('error');
-      setStatusMessage(`Gagal menyimpan: ${err.message || 'Terjadi kesalahan'}`);
+      setStatusMessage(`Failed to save: ${err.message || 'An error occurred'}`);
     } finally {
       setIsSaving(false);
     }
@@ -200,28 +200,28 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#090a0d] text-[#f5f3ef] font-satoshi flex flex-col selection:bg-white selection:text-[#090a0d]">
+    <div className="min-h-screen bg-[#ffffff] text-zinc-900 font-satoshi flex flex-col selection:bg-zinc-950 selection:text-white">
       {/* Header */}
-      <header className="h-16 px-4 sm:px-8 md:px-12 flex items-center justify-between border-b border-zinc-800/80 bg-[#090a0d]/90 sticky top-0 z-40 backdrop-blur-md">
+      <header className="h-16 px-4 sm:px-8 md:px-12 flex items-center justify-between border-b border-zinc-200/80 bg-white/80 sticky top-0 z-40 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button
             onClick={navigateToDashboard}
-            className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors cursor-pointer text-sm"
+            className="flex items-center gap-2 text-zinc-600 hover:text-zinc-950 transition-colors cursor-pointer text-sm font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Dashboard</span>
           </button>
-          <div className="h-4 w-[1px] bg-zinc-800" />
+          <div className="h-4 w-[1px] bg-zinc-200" />
           <div className="flex items-center gap-2">
             <img
               src="/logo.png"
               alt="Logo"
-              className="w-6 h-6 rounded-md object-contain border border-white/20"
+              className="w-6 h-6 rounded-md object-contain border border-zinc-200"
             />
-            <span className="font-bold tracking-tight text-white text-sm sm:text-base">
-              INCINERATOR
+            <span className="font-bold tracking-tight text-zinc-950 text-sm sm:text-base">
+              MUSEBURN
             </span>
-            <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-white/10 text-white border border-white/20">
+            <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-700 border border-zinc-200 font-semibold">
               Admin
             </span>
           </div>
@@ -238,25 +238,25 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
       </header>
 
       {/* Main Admin Form */}
-      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-8">
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-[#fafafa]">
         <div className="max-w-xl w-full">
           {/* Card Container */}
-          <div className="bg-[#111318] border border-zinc-800/80 rounded-2xl p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden">
-            {/* Ambient Silver Glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.03] rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/[0.03] rounded-full blur-3xl pointer-events-none" />
+          <div className="bg-white border border-zinc-200/90 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+            {/* Ambient Warm Glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-zinc-100 rounded-full blur-3xl pointer-events-none" />
 
             {/* Header Content */}
             <div className="mb-6 relative z-10">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-800/60 border border-zinc-700/60 text-xs font-mono text-zinc-300 mb-3">
-                <span className="w-2 h-2 rounded-full bg-white" />
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-xs font-mono text-zinc-700 mb-3 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-zinc-900" />
                 Endpoint /memex
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white m-0">
+              <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 m-0">
                 Admin Panel
               </h1>
-              <p className="text-xs sm:text-sm text-zinc-400 mt-1.5 leading-relaxed">
-                Konfigurasi kredensial operator dan target token address untuk siklus eksekusi engine.
+              <p className="text-xs sm:text-sm text-zinc-500 mt-1.5 leading-relaxed">
+                Configure keeper operator credentials and target token address for autonomous engine cycles.
               </p>
             </div>
 
@@ -264,12 +264,12 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
               {/* Field 1: Private Key */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs sm:text-sm font-semibold text-zinc-200 flex items-center gap-2">
-                    <Key className="w-4 h-4 text-white" />
+                  <label className="text-xs sm:text-sm font-semibold text-zinc-800 flex items-center gap-2">
+                    <Key className="w-4 h-4 text-zinc-900" />
                     Private Key
                   </label>
                   {derivedWallet && (
-                    <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                    <span className="text-[11px] font-mono text-emerald-600 flex items-center gap-1 font-semibold">
                       <CheckCircle2 className="w-3 h-3" />
                       Valid Key
                     </span>
@@ -281,16 +281,16 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                     type={showPrivateKey ? 'text' : 'password'}
                     value={privateKey}
                     onChange={(e) => setPrivateKey(e.target.value)}
-                    placeholder="Masukkan private key operator (0x...)"
-                    className="w-full bg-[#0a0b0e] border border-zinc-700/70 focus:border-white focus:ring-1 focus:ring-white rounded-xl px-4 py-3 text-sm font-mono text-white placeholder-zinc-600 outline-none transition-all pr-11"
+                    placeholder="Enter keeper private key (0x...)"
+                    className="w-full bg-zinc-50 border border-zinc-200 focus:border-zinc-900 focus:bg-white focus:ring-1 focus:ring-zinc-900 rounded-xl px-4 py-3 text-sm font-mono text-zinc-900 placeholder-zinc-400 outline-none transition-all pr-11 shadow-xs"
                     autoComplete="off"
                     spellCheck="false"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPrivateKey(!showPrivateKey)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 transition-colors p-1"
-                    title={showPrivateKey ? 'Sembunyikan' : 'Tampilkan'}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 transition-colors p-1"
+                    title={showPrivateKey ? 'Hide' : 'Show'}
                   >
                     {showPrivateKey ? (
                       <EyeOff className="w-4 h-4" />
@@ -302,20 +302,20 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
 
                 {/* Derived Wallet Address Display */}
                 {derivedWallet ? (
-                  <div className="bg-emerald-950/20 border border-emerald-800/30 rounded-lg p-2.5 flex items-center gap-2">
-                    <Wallet className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <div className="text-[11px] font-mono text-zinc-300 truncate">
-                      <span className="text-zinc-400">Address: </span>
-                      <span className="text-emerald-400 font-semibold">{derivedWallet}</span>
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 flex items-center gap-2">
+                    <Wallet className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <div className="text-[11px] font-mono text-zinc-700 truncate">
+                      <span className="text-zinc-500">Address: </span>
+                      <span className="text-emerald-700 font-semibold">{derivedWallet}</span>
                     </div>
                   </div>
                 ) : privateKey.trim().length > 0 ? (
-                  <p className="text-[11px] text-amber-400/90 font-mono">
-                    Format private key belum valid (harus 64 hex characters).
+                  <p className="text-[11px] text-amber-600 font-mono">
+                    Invalid private key format (must be 64 hex characters).
                   </p>
                 ) : (
-                  <p className="text-[11px] text-zinc-400 font-sans">
-                    Private key disimpan aman untuk transaksi on-chain otomatis.
+                  <p className="text-[11px] text-zinc-500 font-sans">
+                    Private key is stored securely for automated on-chain execution.
                   </p>
                 )}
               </div>
@@ -323,12 +323,12 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
               {/* Field 2: Token Address */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs sm:text-sm font-semibold text-zinc-200 flex items-center gap-2">
-                    <Coins className="w-4 h-4 text-white" />
+                  <label className="text-xs sm:text-sm font-semibold text-zinc-800 flex items-center gap-2">
+                    <Coins className="w-4 h-4 text-zinc-900" />
                     Token Address
                   </label>
                   {isTokenValid && (
-                    <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                    <span className="text-[11px] font-mono text-emerald-600 flex items-center gap-1 font-semibold">
                       <CheckCircle2 className="w-3 h-3" />
                       Valid Address
                     </span>
@@ -340,34 +340,34 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                     type="text"
                     value={tokenAddress}
                     onChange={(e) => setTokenAddress(e.target.value)}
-                    placeholder="0x... (Alamat kontrak token)"
-                    className="w-full bg-[#0a0b0e] border border-zinc-700/70 focus:border-white focus:ring-1 focus:ring-white rounded-xl px-4 py-3 text-sm font-mono text-white placeholder-zinc-600 outline-none transition-all"
+                    placeholder="0x... (Token contract address)"
+                    className="w-full bg-zinc-50 border border-zinc-200 focus:border-zinc-900 focus:bg-white focus:ring-1 focus:ring-zinc-900 rounded-xl px-4 py-3 text-sm font-mono text-zinc-900 placeholder-zinc-400 outline-none transition-all shadow-xs"
                     autoComplete="off"
                     spellCheck="false"
                   />
                 </div>
 
                 {tokenAddress.trim().length > 0 && !isTokenValid ? (
-                  <p className="text-[11px] text-amber-400/90 font-mono">
-                    Harus alamat EVM valid 42 karakter (dimulai 0x).
+                  <p className="text-[11px] text-amber-600 font-mono">
+                    Must be a valid 42-character EVM address (starting with 0x).
                   </p>
                 ) : (
-                  <p className="text-[11px] text-zinc-400 font-sans">
-                    Token kontrak yang akan dipantau dan di-burn oleh engine.
+                  <p className="text-[11px] text-zinc-500 font-sans">
+                    Target token contract to be monitored and incinerated by the engine.
                   </p>
                 )}
               </div>
 
-              {/* Field 3: Treasury Address (Opsional untuk Siklus KEEP) */}
+              {/* Field 3: Treasury Address (Optional for KEEP Cycles) */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs sm:text-sm font-semibold text-zinc-200 flex items-center gap-2">
-                    <Landmark className="w-4 h-4 text-white" />
+                  <label className="text-xs sm:text-sm font-semibold text-zinc-800 flex items-center gap-2">
+                    <Landmark className="w-4 h-4 text-zinc-900" />
                     Treasury / Keep Address
-                    <span className="text-[10px] text-zinc-500 font-normal">(Opsional)</span>
+                    <span className="text-[10px] text-zinc-500 font-normal">(Optional)</span>
                   </label>
                   {treasuryAddress.trim() && isTreasuryValid && (
-                    <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                    <span className="text-[11px] font-mono text-emerald-600 flex items-center gap-1 font-semibold">
                       <CheckCircle2 className="w-3 h-3" />
                       Valid Address
                     </span>
@@ -379,20 +379,20 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                     type="text"
                     value={treasuryAddress}
                     onChange={(e) => setTreasuryAddress(e.target.value)}
-                    placeholder="0x... (Alamat wallet penampung fee KEEP)"
-                    className="w-full bg-[#0a0b0e] border border-zinc-700/70 focus:border-white focus:ring-1 focus:ring-white rounded-xl px-4 py-3 text-sm font-mono text-white placeholder-zinc-600 outline-none transition-all"
+                    placeholder="0x... (Creator / Treasury fee recipient wallet)"
+                    className="w-full bg-zinc-50 border border-zinc-200 focus:border-zinc-900 focus:bg-white focus:ring-1 focus:ring-zinc-900 rounded-xl px-4 py-3 text-sm font-mono text-zinc-900 placeholder-zinc-400 outline-none transition-all shadow-xs"
                     autoComplete="off"
                     spellCheck="false"
                   />
                 </div>
 
                 {treasuryAddress.trim().length > 0 && !isTreasuryValid ? (
-                  <p className="text-[11px] text-amber-400/90 font-mono">
-                    Harus alamat EVM valid 42 karakter (dimulai 0x).
+                  <p className="text-[11px] text-amber-600 font-mono">
+                    Must be a valid 42-character EVM address (starting with 0x).
                   </p>
                 ) : (
-                  <p className="text-[11px] text-zinc-400 font-sans">
-                    Alamat penampung ETH saat siklus KEEP. Jika dikosongkan, fee akan tetap disimpan aman di wallet operator tanpa ter-buyback.
+                  <p className="text-[11px] text-zinc-500 font-sans">
+                    Recipient address for ETH during Even (Fee Claim) cycles. If left empty, fees remain securely in the operator wallet.
                   </p>
                 )}
               </div>
@@ -402,14 +402,14 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                 <div
                   className={`p-3 rounded-xl border text-xs font-mono flex items-start gap-2 ${
                     saveStatus === 'success'
-                      ? 'bg-emerald-950/30 border-emerald-700/40 text-emerald-300'
-                      : 'bg-red-950/30 border-red-700/40 text-red-300'
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                      : 'bg-red-50 border-red-200 text-red-800'
                   }`}
                 >
                   {saveStatus === 'success' ? (
-                    <Check className="w-4 h-4 shrink-0 text-emerald-400 mt-0.5" />
+                    <Check className="w-4 h-4 shrink-0 text-emerald-600 mt-0.5" />
                   ) : (
-                    <ShieldAlert className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+                    <ShieldAlert className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
                   )}
                   <span>{statusMessage}</span>
                 </div>
@@ -420,17 +420,17 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="w-full py-3 px-5 rounded-xl bg-white hover:bg-zinc-200 text-black font-semibold text-sm transition-all shadow-[0_4px_20px_rgba(255,255,255,0.2)] hover:shadow-[0_6px_25px_rgba(255,255,255,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-3.5 px-5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white font-semibold text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
                 >
                   {isSaving ? (
                     <>
-                      <RefreshCw className="w-4 h-4 animate-spin text-black" />
-                      Menyimpan...
+                      <RefreshCw className="w-4 h-4 animate-spin text-white" />
+                      Saving...
                     </>
                   ) : (
                     <>
-                      <Save className="w-4 h-4 text-black" />
-                      Simpan Konfigurasi
+                      <Save className="w-4 h-4 text-white" />
+                      Save Configuration
                     </>
                   )}
                 </button>

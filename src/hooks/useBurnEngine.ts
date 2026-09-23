@@ -21,8 +21,8 @@ export const OFFICIAL_CREATOR_ADDRESS = import.meta.env.VITE_CREATOR_ADDRESS || 
 export const OFFICIAL_RPC_URL = 'https://rpc.mainnet.chain.robinhood.com';
 
 const ENV_CYCLE_INTERVAL = parseInt(import.meta.env.VITE_CYCLE_INTERVAL_SECONDS || '300', 10);
-const ENV_TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME || 'INCINERATOR';
-const ENV_TOKEN_SYMBOL = import.meta.env.VITE_TOKEN_SYMBOL || 'INCINERATOR';
+const ENV_TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME || 'MUSEBURN';
+const ENV_TOKEN_SYMBOL = import.meta.env.VITE_TOKEN_SYMBOL || 'MUSEBURN';
 const ENV_CLAIM_THRESHOLD = parseFloat(import.meta.env.VITE_CLAIM_THRESHOLD_ETH || '0.01');
 
 export const INITIAL_CONFIG: MachineConfig = {
@@ -165,7 +165,7 @@ export function useFlywheelEngine() {
   const [logs, setLogs] = useState<ActivityLog[]>(() => getInitialLogs(config));
   const [burnLedger, setBurnLedger] = useState<BurnLedgerEntry[]>(getInitialLedger);
 
-  // Helper untuk update & simpan logs ke localStorage secara persisten
+  // Helper to update and persist logs to localStorage
   const updateLogsWithStorage = useCallback((updater: ActivityLog[] | ((prev: ActivityLog[]) => ActivityLog[])) => {
     setLogs((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
@@ -176,7 +176,7 @@ export function useFlywheelEngine() {
     });
   }, []);
 
-  // Helper untuk update & simpan burnLedger ke localStorage secara persisten
+  // Helper to update and persist burnLedger to localStorage
   const updateLedgerWithStorage = useCallback((updater: BurnLedgerEntry[] | ((prev: BurnLedgerEntry[]) => BurnLedgerEntry[])) => {
     setBurnLedger((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
@@ -633,7 +633,7 @@ export function useFlywheelEngine() {
               };
             });
 
-            // Sinkronisasi logs dari bot backend ke activity telemetry dan localStorage
+            // Synchronize logs from backend bot to activity telemetry and localStorage
             if (data.logs && Array.isArray(data.logs) && data.logs.length > 0) {
               const mappedBotLogs: ActivityLog[] = data.logs.map((bl: any, idx: number) => {
                 const msgLower = (bl.message || '').toLowerCase();
