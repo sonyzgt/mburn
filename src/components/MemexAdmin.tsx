@@ -12,7 +12,9 @@ import {
   Wallet,
   CheckCircle2,
   RefreshCw,
-  Landmark
+  Landmark,
+  RotateCcw,
+  Trash2
 } from 'lucide-react';
 import { LiquidMetalButton } from './ui/liquid-metal-button';
 
@@ -190,6 +192,93 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
     }
   };
 
+  const handleResetTokenAddress = () => {
+    setTokenAddress('');
+    try {
+      localStorage.removeItem('memex_token_address');
+      window.dispatchEvent(new Event('memex_config_updated'));
+    } catch {}
+    setStatusMessage('Token contract address has been cleared.');
+    setSaveStatus('success');
+    setTimeout(() => setSaveStatus('idle'), 3000);
+  };
+
+  const handleResetAll = async () => {
+    if (!window.confirm('Are you sure you want to reset all addresses and configuration back to blank/defaults?')) {
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveStatus('idle');
+    setStatusMessage('');
+
+    try {
+      // 1. Clear component state
+      setTokenAddress('');
+      setPrivateKey('');
+      setTreasuryAddress('');
+      setDerivedWallet(null);
+
+      // 2. Remove all storage keys
+      try {
+        localStorage.removeItem('memex_token_address');
+        localStorage.removeItem('memex_private_key');
+        localStorage.removeItem('memex_treasury_address');
+        localStorage.removeItem('memex_creator_address');
+        localStorage.removeItem('jollyburn_engine_config');
+        localStorage.removeItem('jollyburn_activity_logs');
+        localStorage.removeItem('jollyburn_burn_ledger');
+        localStorage.removeItem('museburn_engine_config');
+        localStorage.removeItem('museburn_activity_logs');
+        localStorage.removeItem('museburn_burn_ledger');
+        localStorage.removeItem('incinerator_engine_config');
+        localStorage.removeItem('incinerator_activity_logs');
+        localStorage.removeItem('incinerator_burn_ledger');
+      } catch {}
+
+      // 3. Dispatch real-time sync event
+      window.dispatchEvent(new Event('memex_config_updated'));
+
+      // 4. Reset backend .env and bot-config.json if server is running
+      try {
+        await fetch('/api/admin/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tokenAddress: '',
+            privateKey: '',
+            treasuryAddress: '',
+            creatorAddress: ''
+          })
+        });
+      } catch {}
+
+      try {
+        await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tokenAddress: '',
+            privateKey: '',
+            treasuryAddress: '',
+            creatorAddress: ''
+          })
+        });
+      } catch {}
+
+      setSaveStatus('success');
+      setStatusMessage('All addresses and configuration have been reset to blank defaults.');
+      setTimeout(() => {
+        setSaveStatus('idle');
+      }, 4000);
+    } catch (err: any) {
+      setSaveStatus('error');
+      setStatusMessage(`Failed to reset: ${err.message || 'An error occurred'}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const navigateToDashboard = () => {
     if (onBack) {
       onBack();
@@ -327,12 +416,25 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                     <Coins className="w-4 h-4 text-zinc-900" />
                     Token Address
                   </label>
-                  {isTokenValid && (
-                    <span className="text-[11px] font-mono text-emerald-600 flex items-center gap-1 font-semibold">
-                      <CheckCircle2 className="w-3 h-3" />
-                      Valid Address
-                    </span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {tokenAddress.trim().length > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleResetTokenAddress}
+                        className="text-[11px] font-mono text-red-500 hover:text-red-700 hover:underline flex items-center gap-1 cursor-pointer transition-colors"
+                        title="Clear Token Address"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        Clear Address
+                      </button>
+                    )}
+                    {isTokenValid && (
+                      <span className="text-[11px] font-mono text-emerald-600 flex items-center gap-1 font-semibold">
+                        <CheckCircle2 className="w-3 h-3" />
+                        Valid Address
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="relative">
@@ -415,12 +517,12 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                 </div>
               )}
 
-              {/* Submit Button */}
-              <div className="pt-2">
+              {/* Action Buttons: Save Configuration & Reset All */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="w-full py-3.5 px-5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white font-semibold text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                  className="w-full sm:flex-1 py-3.5 px-5 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white font-semibold text-sm transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
                 >
                   {isSaving ? (
                     <>
@@ -433,6 +535,17 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
                       Save Configuration
                     </>
                   )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleResetAll}
+                  disabled={isSaving}
+                  className="w-full sm:w-auto py-3.5 px-5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 hover:border-red-300 font-semibold text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                  title="Reset all addresses and configuration back to blank defaults"
+                >
+                  <RotateCcw className="w-4 h-4 text-red-600" />
+                  <span>Reset All</span>
                 </button>
               </div>
             </form>
