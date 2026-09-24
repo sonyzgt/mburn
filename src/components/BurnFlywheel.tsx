@@ -464,7 +464,7 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
           <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl border-2 border-black bg-white p-0.5 object-contain shadow-[2px_2px_0px_#000] flex items-center justify-center">
             <img
               src="/logo.png"
-              alt="Muse Mascot"
+              alt="Jolly Mascot"
               className="w-full h-full object-contain pointer-events-none"
             />
           </div>
