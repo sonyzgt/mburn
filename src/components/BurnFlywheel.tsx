@@ -92,7 +92,7 @@ interface IFeeEscrow {
     function claimFees(address recipient) external returns (uint256);
 }
 
-contract MuseBurnFeeEscrow is IFeeEscrow {
+contract JollyBurnFeeEscrow is IFeeEscrow {
     uint256 public constant THRESHOLD_ETH = 0.01 ether;
     address public immutable burnerRouter;
 
@@ -138,7 +138,7 @@ export async function executeMarketBuyback(
   burn: {
     id: "burn",
     title: "0xdead Graveyard Burn Tool",
-    subtitle: "Node #4 // Irreversible MuseBurn Tool",
+    subtitle: "Node #4 // Irreversible JollyBurn Tool",
     filename: "burnGraveyardSink.ts",
     language: "typescript",
     emoji: "💀",
@@ -156,7 +156,7 @@ export async function transferToGraveyard(
   const tx = await tokenContract.transfer(DEAD_ADDRESS, tokenAmountWei);
   const receipt = await tx.wait();
 
-  console.log(\`[BURN VERIFIED] Destroyed \${ethers.formatEther(tokenAmountWei)} $MUSEBURN\`);
+  console.log(\`[BURN VERIFIED] Destroyed \${ethers.formatEther(tokenAmountWei)} $JOLLYBURN\`);
   console.log(\`[ON-CHAIN PROOF] Tx Hash: \${receipt.hash}\`);
   return receipt;
 }`,
@@ -169,12 +169,12 @@ export async function transferToGraveyard(
     language: "typescript",
     emoji: "📝",
     badgeColor: "bg-cyan-900/60 text-cyan-300 border-cyan-600",
-    description: "Listens to real-time Swap and Sync events on the $MUSEBURN liquidity pool on Robinhood DEX.",
+    description: "Listens to real-time Swap and Sync events on the $JOLLYBURN liquidity pool on Robinhood DEX.",
     code: `// WebSocket listener for real-time DEX Swaps on Robinhood Chain
 pairContract.on("Swap", async (sender, in0, in1, out0, out1, to, event) => {
   console.log(\`[DEX SWAP] Trade detected in block #\${event.log.blockNumber}\`);
   
-  // Dispatches trigger payload to MuseBurn Agent workflow
+  // Dispatches trigger payload to JollyBurn Agent workflow
   await agentWorkflow.dispatch({
     source: "ROBINHOOD_DEX",
     event: "Sync_Swap",
@@ -184,14 +184,14 @@ pairContract.on("Swap", async (sender, in0, in1, out0, out1, to, event) => {
   },
   agent: {
     id: "agent",
-    title: "MuseBurn AI Agent",
+    title: "JollyBurn AI Agent",
     subtitle: "Main Execution Agent // Core Loop",
-    filename: "museBurnAgent.ts",
+    filename: "jollyBurnAgent.ts",
     language: "typescript",
     emoji: "🤖",
     badgeColor: "bg-amber-900/60 text-amber-300 border-amber-600",
     description: "Core autonomous keeper agent that orchestrates escrow checks, fee claims, buybacks, and burns.",
-    code: `// MuseBurn Autonomous Agent - Execution Cycle
+    code: `// JollyBurn Autonomous Agent - Execution Cycle
 export async function runAgentCycle() {
   const escrow = getFeeEscrowContract();
   const pendingFees = await escrow.getPendingFees();
@@ -238,14 +238,14 @@ export function routeCycle(cycleCount: number, escrowBalanceWei: bigint) {
     language: "solidity",
     emoji: "🔥",
     badgeColor: "bg-orange-900/60 text-orange-300 border-orange-600",
-    description: "Odd cycle action: Swaps claimed ETH and delivers $MUSEBURN straight to 0xdead.",
+    description: "Odd cycle action: Swaps claimed ETH and delivers $JOLLYBURN straight to 0xdead.",
     code: `// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 function executeBuybackAndBurn(uint256 ethAmount) external onlyKeeper {
     address[] memory path = new address[](2);
     path[0] = WETH;
-    path[1] = address(MUSEBURN_TOKEN);
+    path[1] = address(JOLLYBURN_TOKEN);
 
     // Tokens bought are deposited directly into the 0xdead graveyard address
     router.swapExactETHForTokensSupportingFeeOnTransferTokens{value: ethAmount}(
@@ -375,15 +375,15 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
   const pathAgentToBurn = "M 460 226 C 460 275, 570 275, 570 324";
 
   const STAGE_MESSAGES_BURN = [
-    "STAGE 1/4 [TRIGGER]: DEX trade detected on Robinhood Chain! Dispatching event signal to MuseBurn Agent...",
-    "STAGE 2/4 [AGENT LOGIC]: MuseBurn Agent polling Robinhood RPC, reading escrow memory & calculating buyback route...",
-    "STAGE 3/4 [BRANCH EVAL]: Odd Cycle (BURN) threshold met! Routing flow along top branch towards 0xdead MuseBurn...",
+    "STAGE 1/4 [TRIGGER]: DEX trade detected on Robinhood Chain! Dispatching event signal to JollyBurn Agent...",
+    "STAGE 2/4 [AGENT LOGIC]: JollyBurn Agent polling Robinhood RPC, reading escrow memory & calculating buyback route...",
+    "STAGE 3/4 [BRANCH EVAL]: Odd Cycle (BURN) threshold met! Routing flow along top branch towards 0xdead JollyBurn...",
     "STAGE 4/4 [0xdead BURN]: Autonomous Buyback executed! Sweeping orderbook and transferring tokens to 0xdead Graveyard...",
   ];
 
   const STAGE_MESSAGES_KEEP = [
-    "STAGE 1/4 [TRIGGER]: DEX trade detected on Robinhood Chain! Dispatching event signal to MuseBurn Agent...",
-    "STAGE 2/4 [AGENT LOGIC]: MuseBurn Agent polling Robinhood RPC, reading escrow memory & calculating 0.02 ETH creator payout...",
+    "STAGE 1/4 [TRIGGER]: DEX trade detected on Robinhood Chain! Dispatching event signal to JollyBurn Agent...",
+    "STAGE 2/4 [AGENT LOGIC]: JollyBurn Agent polling Robinhood RPC, reading escrow memory & calculating 0.02 ETH creator payout...",
     "STAGE 3/4 [BRANCH EVAL]: Even Cycle (KEEP) threshold met! Routing flow along bottom branch towards your Creator Wallet...",
     "STAGE 4/4 [CREATOR PAYOUT]: Fee Claim executed! 100% of accumulated trading fee transferred directly to your Creator Address!",
   ];
@@ -400,7 +400,7 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
     },
     {
       step: 1,
-      title: "2. MuseBurn Agent",
+      title: "2. JollyBurn Agent",
       desc: "RPC & Escrow Evaluation",
       badgeColor: "bg-amber-400 text-black border-black",
       activeBorder: "border-amber-500 shadow-[2px_2px_0px_#d97706]",
@@ -433,7 +433,7 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="font-mono font-black text-sm text-black">
-                MUSEBURN_AUTONOMOUS_WORKFLOW.flow
+                JOLLYBURN_AUTONOMOUS_WORKFLOW.flow
               </span>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 border border-black text-[10px] font-black font-mono text-emerald-800">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping" />
@@ -810,7 +810,7 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
               </text>
             </g>
 
-            {/* ─── NODE 2: MAIN AI AGENT NODE (MuseBurn Agent - STATIC MASCOT) ─── */}
+            {/* ─── NODE 2: MAIN AI AGENT NODE (JollyBurn Agent - STATIC MASCOT) ─── */}
             <g
               transform="translate(280, 115)"
               className="cursor-pointer"
@@ -855,7 +855,7 @@ export const BurnFlywheel: React.FC<BurnFlywheelProps> = ({
 
               {/* Agent Titles */}
               <text x="82" y="38" fill="#000000" fontSize="14" fontWeight="900" fontFamily="sans-serif">
-                MuseBurn Agent
+                JollyBurn Agent
               </text>
 
               <text x="82" y="56" fill="#64748b" fontSize="11" fontWeight="700" fontFamily="monospace">

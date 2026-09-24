@@ -73,14 +73,14 @@ export const BurnLedgerDrawer: React.FC<BurnLedgerDrawerProps> = ({
             txHash: entry.claimTx || "",
           });
         } else {
-          const burnedTokens = entry.burnedMuseburn || entry.burnedIncinerator || 0;
+          const burnedTokens = entry.burnedJollyburn || entry.burnedMuseburn || entry.burnedIncinerator || 0;
           if (burnedTokens > 0 || entry.burnTx) {
             items.push({
               id: `burn-${entry.id}`,
               time: timeOnly,
               type: "burn",
               tag: "BURN",
-              message: `Permanently burned ${new Intl.NumberFormat("en-US").format(Math.round(burnedTokens || 250000))} MUSEBURN to 0x000...dEaD`,
+              message: `Permanently burned ${new Intl.NumberFormat("en-US").format(Math.round(burnedTokens || 250000))} JOLLYBURN to 0x000...dEaD`,
               txHash: entry.burnTx || entry.claimTx || "",
             });
           }

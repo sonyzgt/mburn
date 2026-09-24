@@ -54,6 +54,7 @@ export interface BurnLedgerEntry {
   boughtETH: number;
   boughtUSD: number;
   retainedETH?: number;
+  burnedJollyburn?: number;
   burnedMuseburn?: number;
   burnedIncinerator?: number;
   claimTx: string;

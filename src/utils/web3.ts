@@ -398,6 +398,7 @@ export async function fetchOnChainBurnLedger(
         claimedUSD: claimedETH * ethPriceUSD,
         boughtETH: claimedETH,
         boughtUSD: claimedETH * ethPriceUSD,
+        burnedJollyburn: tokensBurned,
         burnedMuseburn: tokensBurned,
         burnedIncinerator: tokensBurned,
         claimTx: matchingClaim ? matchingClaim.transactionHash : burn.transactionHash,

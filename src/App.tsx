@@ -141,7 +141,7 @@ export function App() {
 
   const totalTokensBurned = state.totalTokensBurned > 0
     ? state.totalTokensBurned
-    : burnLedger.reduce((acc, cur) => acc + (cur.burnedMuseburn || cur.burnedIncinerator || 0), 0);
+    : burnLedger.reduce((acc, cur) => acc + (cur.burnedJollyburn || cur.burnedMuseburn || cur.burnedIncinerator || 0), 0);
 
   const burnedPercent = state.burnedPercentageOfSupply > 0
     ? state.burnedPercentageOfSupply
@@ -149,7 +149,7 @@ export function App() {
       ? (totalTokensBurned / state.totalSupply) * 100
       : 0;
 
-  const tokenSymbol = "$MUSEBURN";
+  const tokenSymbol = "$JOLLYBURN";
 
   return (
     <div className="min-h-screen bg-[#ffffff] text-black font-satoshi selection:bg-yellow-300 selection:text-black flex flex-col relative overflow-x-hidden">
@@ -157,7 +157,7 @@ export function App() {
       {/* 1. Memecoin Infinite Marquee Ticker */}
       <div className="bg-yellow-300 border-b-2 border-black py-1.5 overflow-hidden whitespace-nowrap z-50 select-none shadow-xs">
         <div className="animate-marquee flex items-center gap-6 font-black font-mono text-xs sm:text-sm tracking-wider uppercase text-black">
-          <span className="flex items-center gap-2">🔥 {tokenSymbol} AUTO-MUSEBURN</span>
+          <span className="flex items-center gap-2">🔥 {tokenSymbol} AUTO-JOLLYBURN</span>
           <span>•</span>
           <span className="flex items-center gap-2">🚀 ROBINHOOD CHAIN (ID: 4663)</span>
           <span>•</span>
@@ -178,7 +178,7 @@ export function App() {
 
       {/* 2. Comic Memecoin Navigation Header */}
       <header className="h-16 sm:h-20 px-3 sm:px-8 md:px-12 flex items-center justify-between border-b-2 border-black bg-white/95 sticky top-0 z-40 backdrop-blur-md shrink-0">
-        {/* Brand: MUSEBURN Mascot Logo */}
+        {/* Brand: JOLLYBURN Mascot Logo */}
         <div className="flex items-center gap-2 sm:gap-3">
           <a
             href="/"
@@ -188,7 +188,7 @@ export function App() {
             <div className="relative">
               <img
                 src="/logo.png"
-                alt="MUSEBURN Mascot"
+                alt="JOLLYBURN Mascot"
                 className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl object-contain border-2 border-black shadow-[2px_2px_0px_#000] bg-amber-100 p-0.5 transition-transform group-hover:scale-110 group-hover:rotate-3 shrink-0"
               />
               <span className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 border border-black text-[9px] text-white font-black">
@@ -198,7 +198,7 @@ export function App() {
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-black tracking-tighter text-black text-lg sm:text-2xl uppercase">
-                  MUSEBURN
+                  JOLLYBURN
                 </span>
                 <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black font-mono bg-emerald-300 border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-800 animate-pulse" />
@@ -281,7 +281,7 @@ export function App() {
                   SEND IT TO MOON.
                 </h1>
                 <p className="text-sm sm:text-base md:text-lg text-zinc-700 max-w-lg font-bold leading-relaxed pt-2">
-                  Meet <strong className="text-black font-black">Muse</strong> — the fluffiest, most relentless on-chain burn mascot. Every single trade fee is harvested to market-buy <strong className="text-orange-600">{tokenSymbol}</strong> and burn it into ashes at <strong className="font-mono">0x000...dEaD</strong>.
+                  Meet <strong className="text-black font-black">Jolly</strong> — the fluffiest, most relentless on-chain burn mascot. Every single trade fee is harvested to market-buy <strong className="text-orange-600">{tokenSymbol}</strong> and burn it into ashes at <strong className="font-mono">0x000...dEaD</strong>.
                 </p>
               </div>
 
@@ -422,7 +422,7 @@ export function App() {
                 >
                   <img
                     src="/assets/character.png"
-                    alt="Muse Mascot"
+                    alt="Jolly Mascot"
                     className="w-[280px] sm:w-[360px] md:w-[400px] h-auto object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.15)] pointer-events-auto"
                     draggable={false}
                   />
@@ -441,7 +441,7 @@ export function App() {
 
               {/* Tap Prompt Banner */}
               <p className="text-xs font-black text-zinc-500 uppercase tracking-wider mt-2">
-                👇 Tap Muse for cute surprises!
+                👇 Tap Jolly for cute surprises!
               </p>
             </div>
 
@@ -515,8 +515,8 @@ export function App() {
         {/* 6. Memecoin Footer */}
         <footer className="border-t-2 border-black bg-yellow-100/70 py-8 px-4 text-center space-y-3 mt-12">
           <div className="flex items-center justify-center gap-2">
-            <img src="/logo.png" alt="Muse" className="w-7 h-7 rounded-lg border-2 border-black" />
-            <span className="font-black text-base text-black uppercase tracking-tight">$MUSEBURN ON ROBINHOOD CHAIN</span>
+            <img src="/logo.png" alt="Jolly" className="w-7 h-7 rounded-lg border-2 border-black" />
+            <span className="font-black text-base text-black uppercase tracking-tight">$JOLLYBURN ON ROBINHOOD CHAIN</span>
           </div>
           <p className="text-xs font-bold text-zinc-600 max-w-md mx-auto">
             Zero team allocation, zero hidden taxes, automated burns verified on-chain. Stay cozy, burn supply, enjoy the ride! 🚀

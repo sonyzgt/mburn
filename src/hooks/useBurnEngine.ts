@@ -21,8 +21,8 @@ export const OFFICIAL_CREATOR_ADDRESS = import.meta.env.VITE_CREATOR_ADDRESS || 
 export const OFFICIAL_RPC_URL = 'https://rpc.mainnet.chain.robinhood.com';
 
 const ENV_CYCLE_INTERVAL = parseInt(import.meta.env.VITE_CYCLE_INTERVAL_SECONDS || '300', 10);
-const ENV_TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME || 'MUSEBURN';
-const ENV_TOKEN_SYMBOL = import.meta.env.VITE_TOKEN_SYMBOL || 'MUSEBURN';
+const ENV_TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME || 'JOLLYBURN';
+const ENV_TOKEN_SYMBOL = import.meta.env.VITE_TOKEN_SYMBOL || 'JOLLYBURN';
 const ENV_CLAIM_THRESHOLD = parseFloat(import.meta.env.VITE_CLAIM_THRESHOLD_ETH || '0.01');
 
 export const INITIAL_CONFIG: MachineConfig = {
@@ -94,7 +94,7 @@ const getInitialState = (cfg: MachineConfig): FlywheelState => {
 
 const getInitialLogs = (cfg: MachineConfig): ActivityLog[] => {
   try {
-    const stored = localStorage.getItem('museburn_activity_logs') || localStorage.getItem('incinerator_activity_logs');
+    const stored = localStorage.getItem('jollyburn_activity_logs') || localStorage.getItem('museburn_activity_logs') || localStorage.getItem('incinerator_activity_logs');
     if (stored) {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -107,7 +107,7 @@ const getInitialLogs = (cfg: MachineConfig): ActivityLog[] => {
 
 const getInitialLedger = (): BurnLedgerEntry[] => {
   try {
-    const stored = localStorage.getItem('museburn_burn_ledger') || localStorage.getItem('incinerator_burn_ledger');
+    const stored = localStorage.getItem('jollyburn_burn_ledger') || localStorage.getItem('museburn_burn_ledger') || localStorage.getItem('incinerator_burn_ledger');
     if (stored) {
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -128,7 +128,7 @@ export function useFlywheelEngine() {
     setConfigState((prev) => {
       const resolved = typeof newConfig === 'function' ? newConfig(prev) : newConfig;
       try {
-        localStorage.setItem('museburn_engine_config', JSON.stringify(resolved));
+        localStorage.setItem('jollyburn_engine_config', JSON.stringify(resolved));
       } catch (e) {
         // ignore
       }
@@ -158,6 +158,9 @@ export function useFlywheelEngine() {
       localStorage.removeItem('museburn_engine_config');
       localStorage.removeItem('museburn_activity_logs');
       localStorage.removeItem('museburn_burn_ledger');
+      localStorage.removeItem('jollyburn_engine_config');
+      localStorage.removeItem('jollyburn_activity_logs');
+      localStorage.removeItem('jollyburn_burn_ledger');
     } catch (e) {
       // ignore
     }
@@ -173,7 +176,7 @@ export function useFlywheelEngine() {
     setLogs((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
       try {
-        localStorage.setItem('museburn_activity_logs', JSON.stringify(next.slice(0, 80)));
+        localStorage.setItem('jollyburn_activity_logs', JSON.stringify(next.slice(0, 80)));
       } catch (e) {}
       return next;
     });
@@ -184,7 +187,7 @@ export function useFlywheelEngine() {
     setBurnLedger((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
       try {
-        localStorage.setItem('museburn_burn_ledger', JSON.stringify(next.slice(0, 100)));
+        localStorage.setItem('jollyburn_burn_ledger', JSON.stringify(next.slice(0, 100)));
       } catch (e) {}
       return next;
     });
@@ -283,7 +286,7 @@ export function useFlywheelEngine() {
             if (prevLogs.length === 0) {
               const seedLogs: ActivityLog[] = [];
               for (const entry of ledgerRes.entries.slice(0, 30)) {
-                const burnedTokens = entry.burnedMuseburn || entry.burnedIncinerator || 0;
+                const burnedTokens = entry.burnedJollyburn || entry.burnedMuseburn || entry.burnedIncinerator || 0;
                 seedLogs.push({
                   id: `burn-${entry.id}`,
                   timestamp: entry.timeStr.split(' (')[0],

@@ -89,7 +89,7 @@ export const FlywheelWheel: React.FC<FlywheelWheelProps> = ({
       id: 'burn' as EnginePhase,
       num: '04',
       name: 'BURN',
-      sublabel: 'DEAD MUSEBURN',
+      sublabel: 'DEAD JOLLYBURN',
       target: '0x0...dEaD',
       icon: Flame,
       activeColor: 'text-rose-400 border-rose-400 bg-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.4)]',

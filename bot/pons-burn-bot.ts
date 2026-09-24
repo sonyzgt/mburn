@@ -6,7 +6,7 @@
  * Fitur:
  * 1. Menjalankan Autonomous Cycle (Claim Fee -> Buyback -> Burn) 24/7 di PM2.
  * 2. Uniswap v4 Universal Router integration untuk token yang telah graduated.
- * 3. Token CA & Curve Address terkunci permanen ke $MUSEBURN.
+ * 3. Token CA & Curve Address terkunci permanen ke $JOLLYBURN.
  */
 
 import http from "http";
@@ -40,16 +40,16 @@ try {
 // File konfigurasi persisten
 const CONFIG_FILE = path.resolve(process.cwd(), "bot-config.json");
 
-export const OFFICIAL_MUSEBURN_TOKEN = process.env.TOKEN_ADDRESS || process.env.VITE_TOKEN_ADDRESS || "";
-export const OFFICIAL_MUSEBURN_CURVE = process.env.CURVE_ADDRESS || process.env.VITE_CURVE_ADDRESS || "";
+export const OFFICIAL_JOLLYBURN_TOKEN = process.env.TOKEN_ADDRESS || process.env.VITE_TOKEN_ADDRESS || "";
+export const OFFICIAL_JOLLYBURN_CURVE = process.env.CURVE_ADDRESS || process.env.VITE_CURVE_ADDRESS || "";
 
 // Default Config (Semua address di-reset dari 0)
 let currentConfig = {
   rpcUrl: process.env.RPC_URL || process.env.VITE_RPC_URL || "https://rpc.mainnet.chain.robinhood.com",
   privateKey: process.env.CREATOR_PRIVATE_KEY || process.env.PRIVATE_KEY || "",
   treasuryAddress: process.env.TREASURY_ADDRESS || process.env.CREATOR_ADDRESS || process.env.VITE_CREATOR_ADDRESS || "",
-  tokenAddress: OFFICIAL_MUSEBURN_TOKEN,
-  curveAddress: OFFICIAL_MUSEBURN_CURVE,
+  tokenAddress: OFFICIAL_JOLLYBURN_TOKEN,
+  curveAddress: OFFICIAL_JOLLYBURN_CURVE,
   claimThresholdETH: process.env.CLAIM_THRESHOLD_ETH || process.env.VITE_CLAIM_THRESHOLD_ETH || "0.01",
   pollIntervalSeconds: parseInt(process.env.POLL_INTERVAL_SECONDS || "10", 10),
   port: parseInt(process.env.PORT || "5015", 10),
@@ -558,7 +558,7 @@ server.on("error", (err: any) => {
 
 server.listen(PORT, "0.0.0.0", () => {
   console.log("==========================================================");
-  console.log(`MUSEBURN AUTONOMOUS BURN ENGINE & API SERVER ACTIVE`);
+  console.log(`JOLLYBURN AUTONOMOUS BURN ENGINE & API SERVER ACTIVE`);
   console.log(`   Server Port      : ${PORT}`);
   console.log(`   Admin API Ready  : http://localhost:${PORT}/api/status`);
   console.log(`   Operator Wallet  : ${botState.walletAddress || "Not ready"}`);

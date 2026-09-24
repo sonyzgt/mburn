@@ -219,7 +219,7 @@ export function MemexAdmin({ onBack }: MemexAdminProps) {
               className="w-6 h-6 rounded-md object-contain border border-zinc-200"
             />
             <span className="font-bold tracking-tight text-zinc-950 text-sm sm:text-base">
-              MUSEBURN
+              JOLLYBURN
             </span>
             <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-700 border border-zinc-200 font-semibold">
               Admin

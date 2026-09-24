@@ -38,7 +38,7 @@ export const PonsContractsCard: React.FC = () => {
       address: PONS_V2_CONFIG.contracts.deadAddress,
       key: 'dead',
       highlight: true,
-      desc: 'Irreversible MuseBurn address permanently extinguishing circulating tokens.'
+      desc: 'Irreversible JollyBurn address permanently extinguishing circulating tokens.'
     },
     {
       role: 'FACTORY DEPLOYER',
