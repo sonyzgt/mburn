@@ -225,8 +225,8 @@ export function App() {
 
           {/* Twitter / X */}
           <button
-            onClick={() => window.open('https://x.com/museburn_rh', '_blank')}
-            title="Twitter / X (@museburn_rh)"
+            onClick={() => window.open('https://x.com/jollyburn', '_blank')}
+            title="Twitter / X (@jollyburn)"
             className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-sky-200 hover:bg-sky-100 text-black comic-btn flex items-center justify-center shadow-[3px_3px_0px_#000]"
           >
             <svg className="w-4 h-4 fill-current text-black" viewBox="0 0 24 24">
